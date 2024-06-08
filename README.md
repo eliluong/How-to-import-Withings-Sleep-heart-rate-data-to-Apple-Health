@@ -47,7 +47,7 @@ output_df = pd.DataFrame(output_data)
 output_df.to_csv('output.csv', header=False, index=False)
 ```
 ## 3. Create an API to access the data
-I will let Apple Shortcuts access an API to get the data for import. You can do this via whatever method works best. This is the PHP script.
+I will let Apple Shortcuts access an API to get the data for import. You can do this via whatever method works best. I used a PHP script as it was the easiest to set up.
 ```
 <?php
 header('Content-Type: application/json');
