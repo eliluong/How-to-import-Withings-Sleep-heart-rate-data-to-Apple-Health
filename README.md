@@ -7,7 +7,7 @@ Read these [instructions](https://support.withings.com/hc/en-us/articles/2014913
 Open this file in a text editor. The first row is the header row. The subsequent rows are generated from the Sleep Tracking Mat, but may also contain data from other sources. In my CSV file, the heart rate values were duplicated for some reason, so I took what I needed, and put it into a separate CSV file.
 
 The structure of the data is as follows. `start` is the time this row of data starts. It is in `+02:00` timezone. `duration` and `value` are both arrays of the same length. I believe each element in `duration` represents seconds, and it signifies either the average heart rate over 60 seconds, or how long until the next reading. In any case, the Sleep Tracking Mat is recording heart rate every 60 seconds into the `value` variable.
-```
+```csv
 start,duration,value
 2024-06-07T09:22:00+02:00,"[60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60]","[65,65,63,62,67,64,63,63,61,64,66,63,65,66,65,64,65,65,64,66,65,66,66,67,66,67,66,66,68,66,65,66,67,66,66,68,68,68,67,68,67,67,67,68,67,68,68,67,68,68,68,68,68,67,68,68,67,68,69,68,69,69,69,69,69,69,69,67,69,72,73,73,75,75,73,76,74,76,76,73,73,75,73,72,70,68,68,69,68,68,69,69,66,65,67,65,66,66,67,67,67,66,67,67,66,67,66,66,66,66,65,66,66,66,65,65,66,66,65,64,64,65,65,65,65,65,65,65,65,64,64,65,66,65,65,66,65,66,64,61,63,63,64,64,65,64,71,73,72,71,71,73,72,71,64,69,63,65,67,66,65,66,64,67,68,66,69,67,66,66,71,70,68,71,69,62,64,62,61,66]"
 2024-06-07T12:22:00+02:00,"[60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60]","[62,64,63,61,61,62,59,60,59,60,60,57,55,57,57,58,57,58,58,58,59,61,55,56,56,56,56,57,56,56,55,55,56,56,56,56,56,56,56,56,56,56,56,55,57,58,56,57,58,58,58,60,56,57,55,58,58,60,64,59,59,58,69,62,60,60,59,59,62,61,57,58,60,59,60,60,59,56,62,60,63,65,65,66,64,65,65,65,66,66,66,66,65,66,66,66,67,64,62,61,61,62,61,60,60,59,60,61,60,60,60,59,61,63,63,65,65,64,66,64,66,65,64,65,66,67,71,72,70,71,72,71,64,65,69,68,71,70,68,66,73,73,73,73,70,71]"
@@ -21,7 +21,7 @@ This Python script will take the CSV file, correct the time to my timezone and a
 You will need to adjust the timezone to where you are. I am not sure what will happen when DST starts/ends, but I will find that out later.
 
 Since the Sleep Tracking Mat is producing a heart rate value every minute, I chose to import heart rate every three minutes to avoid cluttering Apple Health with excessive data. You can adjust this as needed.
-```
+```python
 import pandas as pd
 import json
 import ast
@@ -48,7 +48,7 @@ output_df.to_csv('output.csv', header=False, index=False)
 ```
 ## 3. Create an API to access the data
 I will let Apple Shortcuts access an API to get the data for import. You can do this via whatever method works best. I used a PHP script as it was the easiest to set up.
-```
+```php
 <?php
 header('Content-Type: application/json');
 $csvFilePath = 'output.csv';
